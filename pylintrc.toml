@@ -46,7 +46,8 @@ valid-classmethod-first-arg = ["cls"]
 valid-metaclass-classmethod-first-arg = ["mcs"]
 
 [tool.pylint.design]
-max-args = 5
+max-args = 7
+max-positional-arguments = 7
 max-attributes = 8
 max-bool-expr = 5
 max-branches = 12
