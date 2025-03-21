@@ -7,6 +7,7 @@ limit-inference-results = 100
 persistent = true
 py-version = "3.12"
 suggestion-mode = true
+load-plugins=["pylint.extensions.docparams"]
 
 [tool.pylint.basic]
 argument-naming-style = "snake_case"

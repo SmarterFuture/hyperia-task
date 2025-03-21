@@ -1,7 +1,11 @@
 import datetime as dt
 
 
-class Prospekt:
+class Prospect:
+    """Prospect.
+    Formater to desired format
+    """
+
     DATE_FORMAT = "%Y-%m-%d"
     DATETIME_FORMAT = f"{DATE_FORMAT} %H:%M:%S"
 
@@ -14,6 +18,16 @@ class Prospekt:
         valid_to: dt.datetime,
         parsed_at: dt.datetime,
     ) -> None:
+        """__init__.
+
+        Args:
+            title (str): prospect title
+            thumbnail (str): thumbnail url
+            shop_name (str): shop/vendor's name
+            valid_from (dt.datetime): prospect is valid from [date]
+            valid_to (dt.datetime): prospect is valid until [date]
+            parsed_at (dt.datetime): prospect was fetched at [date]
+        """
         self._title = title
         self._thumbnail = thumbnail
         self._shop_name = shop_name
@@ -22,9 +36,17 @@ class Prospekt:
         self._parsed_time = parsed_at
 
     def __repr__(self) -> str:
-        return f"Prospekt<{self._shop_name}, {self._parsed_time.strftime(self.DATETIME_FORMAT)}>"
+        return f"Prospect<{self._shop_name}, {self._parsed_time.strftime(self.DATETIME_FORMAT)}>"
 
     def to_json(self) -> dict[str, str | dt.datetime]:
+        """to_json.
+        Converts Prospect object to JSON format
+
+        Args:
+
+        Returns:
+            dict[str, str | dt.datetime]: JSON-like fromat
+        """
         return {
             "title": self._title,
             "thumbnail": self._thumbnail,

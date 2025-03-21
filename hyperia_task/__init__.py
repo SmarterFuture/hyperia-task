@@ -1,3 +1,3 @@
-from .prospekt import Prospekt
-from .prospekt_extractor import ProspektExtractor, AsyncProspektExtractor
+from .prospect import Prospect
+from .prospect_extractor import ProspectExtractor
 from .hypermarket_extractor import HypermarketExtractor

@@ -7,14 +7,22 @@ WEBPAGE = "https://www.prospektmaschine.de/hypermarkte/"
 
 
 async def main():
-    raw_hypermarkets = hyperia_task.HypermarketExtractor(WEBPAGE)
+    """main.
+    Runs when the module is called directly
+    """
 
-    raw_json = []
-    async for market in raw_hypermarkets.async_hypermarkets:
-        raw_json += list(map(lambda x: x.to_json(), market.prospekts))
+    try:
+        raw_hypermarkets = hyperia_task.HypermarketExtractor(WEBPAGE)
 
-    with open("prospekts.tmp.json", "w", encoding="utf8") as file:
-        json.dump(raw_json, file)
+        raw_json = []
+        async for market in raw_hypermarkets.async_hypermarkets:
+            raw_json += list(map(lambda x: x.to_json(), market.prospects))
+
+        with open("prospects.tmp.json", "w", encoding="utf8") as file:
+            json.dump(raw_json, file)
+
+    except Exception as exc:
+        print("Prospects not fetched:", exc)
 
 
 if __name__ == "__main__":
