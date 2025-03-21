@@ -1,0 +1,1 @@
+import bulletin_scraper

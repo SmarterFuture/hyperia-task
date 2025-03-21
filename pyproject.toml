@@ -1,0 +1,18 @@
+[project]
+name = "hyperia-task"
+version = "0.1.0"
+description = "Tool for scraping prospects collecting information"
+requires-python = ">=3.12"
+dependencies = [
+    "beautifulsoup4 (>=4.13.3,<5.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^3.3.5"
+pyink = "^24.10.1"
+
