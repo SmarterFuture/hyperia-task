@@ -23,5 +23,5 @@ Funkcia jednotlivých metód je dokumentovaná priamo v programe.
 ## Zadanie 
 
 Špecifikácia zadania:  
-https://docs.google.com/document/d/18hl1kpYzezPBzSSO7fVriSN6psjtsOCXrePFljUFxIU:w
+https://docs.google.com/document/d/18hl1kpYzezPBzSSO7fVriSN6psjtsOCXrePFljUFxIU
 
