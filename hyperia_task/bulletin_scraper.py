@@ -45,12 +45,14 @@ class Prospekt:
 class WebProspektsDataHandler:
     DATE_FORMAT = "%d.%m.%Y"
 
-    def __init__(self, url: str) -> None:
+    def __init__(self, url: str, shop_name: str) -> None:
         request = requests.get(url.strip(), timeout=10)
         self._parsed = BeautifulSoup(request.content, "html.parser")
         self._parsed_at = dt.datetime.now()
         
         self._prospekts = self._parsed.find_all(class_=re.compile(r"brochure\-thumb.*"))
+
+        self._shop_name = shop_name
     
     @property
     def bulletins(self) -> Iterator[Prospekt]:
@@ -60,21 +62,15 @@ class WebProspektsDataHandler:
         title_env = tag.find_next("strong")
         title = title_env.get_text() if title_env else "not found"
 
-        picture_envs: list = tag.find_all("picture") if tag else []
-        print(picture_envs)
+        picture_env = tag.find("picture") if tag else None
 
         thumbnail = "not found"
-        shop_name = "not found"
 
-        if len(picture_envs) == 2:
+        if picture_env:
 
-            thumbnail_env = picture_envs[0].img
+            thumbnail_env = picture_env.img
             thumbnail = thumbnail_env.get("src") or thumbnail_env.get("data-src")
 
-            logo_text = picture_envs[1].img.get("alt") or "" 
-            shop_name_raw = logo_text.split(maxsplit=1) or [""]
-            shop_name = shop_name_raw.pop()
-        
         validity_env = tag.find_next(class_="hidden-sm")
         validity = validity_env.get_text().split(" - ") if validity_env else []
         
@@ -84,7 +80,7 @@ class WebProspektsDataHandler:
             valid_from = dt.datetime.strptime(validity[0], self.DATE_FORMAT)
             valid_to = dt.datetime.strptime(validity[1], self.DATE_FORMAT)
         
-        return Prospekt(title, thumbnail, shop_name, valid_from, valid_to, self._parsed_at)
+        return Prospekt(title, thumbnail, self._shop_name, valid_from, valid_to, self._parsed_at)
 
 
 class HypermarkteDataHandler:
@@ -104,11 +100,12 @@ class HypermarkteDataHandler:
 
 
         for link in map(lambda tag: str(tag.get("href")), hypermarkets):
-            self._hypermarkets_links.append(parse.urljoin(url, link))
+            shop_name = link.replace("/", "")
+            self._hypermarkets_links.append((parse.urljoin(url, link), shop_name))
         
     @property
     def hypermarkets(self) -> Iterator[WebProspektsDataHandler]:
-        return map(WebProspektsDataHandler, self._hypermarkets_links)
+        return map(lambda data: WebProspektsDataHandler(*data), self._hypermarkets_links)
 
 
 if __name__ == "__main__":
@@ -121,9 +118,9 @@ if __name__ == "__main__":
     
     raw_out = []
 
-    # for market in complete.hypermarkets:
-    market = next(complete.hypermarkets)
-    raw_out += list(map(lambda x: x.to_json(), market.bulletins))
+    for market in complete.hypermarkets:
+    # market = next(complete.hypermarkets)
+        raw_out += list(map(lambda x: x.to_json(), market.bulletins))
 
     with open("tmp_out.json", "w") as f:
         json.dump(raw_out, f)
